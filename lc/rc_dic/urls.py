@@ -4,6 +4,6 @@ from . import views
 
 app_name = 'rc_dic'
 urlpatterns = [
-    # path('', views.LemmaListView.as_view(), name='index'),
+    path('', views.index, name='index'),
     path('lemmas', views.list_lemmas, name='list_lemmas'),
 ]
