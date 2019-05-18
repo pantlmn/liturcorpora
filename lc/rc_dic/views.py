@@ -7,6 +7,9 @@ from django.core.paginator import Paginator
 
 from .models import Lemma, Token
 
+def index(request):
+    return render(request, 'rc_dic/main_index.html', {})
+
 
 def list_lemmas(request):
     all_lemmas = Lemma.objects.all().order_by('lemma_rc')
