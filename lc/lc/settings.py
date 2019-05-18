@@ -25,7 +25,7 @@ SECRET_KEY = 'y53_-(du4!37f47chuu&yh_$q=$xe^1e8@obv3n0wvw*20nx_1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pantlmn.ru']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
