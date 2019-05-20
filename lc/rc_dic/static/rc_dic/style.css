@@ -18,7 +18,7 @@
 	font-style: normal;
 }
 @font-face {
-	font-family: 'Old Standard TT';
+	font-family: 'Old Standard';
 	src: url('/static/rc_dic/OldStandardTT-Regular.eot');
 	src: local('Old Standard TT Regular'), local('OldStandardTT-Regular'),
 		url('/static/rc_dic/OldStandardTT-Regular.eot?#iefix') format('embedded-opentype'),
