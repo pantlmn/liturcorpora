@@ -6,8 +6,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{% static 'rc_dic/materialize/css/materialize.min.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="{% static 'rc_dic/style.css' %}" type="text/css" rel="stylesheet"/>
+    <title>Леммы ruscorpora</title>
 </head>
-<body class="amber lighten-4">
+<body class="amber lighten-5">
 <nav>
     <div class="nav-wrapper row deep-orange darken-4">
         <div class="col s12 l8 offset-l2">
@@ -42,7 +43,7 @@
 <div class="col s12 m12 l8 offset-l2">
 <div class="collection flow-text">
     {% for lemma in lemmas %}
-        <a href="#!" class="collection-item csl brown-text text-darken-2">{{ lemma.lemma_rc }}</a>
+        <a href="#!" class="collection-item csl-rc brown-text text-darken-2">{{ lemma.lemma_rc }}</a>
     {% endfor %}
 </div>
 </div>
