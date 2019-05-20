@@ -7,7 +7,16 @@
     <link href="{% static 'rc_dic/materialize/css/materialize.min.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="{% static 'rc_dic/style.css' %}" type="text/css" rel="stylesheet"/>
 </head>
-<body>
+<body class="amber lighten-4">
+<nav>
+    <div class="nav-wrapper row deep-orange darken-4">
+        <div class="col s12 l8 offset-l2">
+            <a href="/" class="breadcrumb"><i class="material-icons">home</i></a>
+            <a href="/ruscorpora" class="breadcrumb">ruscorpora</a>
+            <a href="#!" class="breadcrumb">леммы</a>
+        </div>
+    </div>
+</nav>
 <div class="row center">
 <div class="col s12 m12 l8 offset-l2">
 <ul class="pagination">
@@ -18,7 +27,7 @@
         <li class="disabled"><a href="#!"><i class="material-icons">first_page</i></a></li>
         <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
     {% endif %}
-    <li class="active"><a href="#!">{{ lemmas.number }}</a></li>
+    <li class="active deep-orange darken-3"><a>{{ lemmas.number }}</a></li>
     {% if lemmas.has_next %}
         <li class="waves-effect"><a href="?page={{ lemmas.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
         <li class="waves-effect"><a href="?page={{  lemmas.paginator.num_pages }}"><i class="material-icons">last_page</i></a></li>
@@ -31,12 +40,13 @@
 </div>
 <div class=row>
 <div class="col s12 m12 l8 offset-l2">
-<ul class="collection flow-text">
+<div class="collection flow-text">
     {% for lemma in lemmas %}
-        <li class="collection-item csl">{{ lemma.lemma_rc }}</li>
+        <a href="#!" class="collection-item csl brown-text text-darken-2">{{ lemma.lemma_rc }}</a>
     {% endfor %}
-</ul>
 </div>
 </div>
+</div>
+<script type="text/javascript" src="{% static 'rc_dic/materialize/js/materialize.min.js' %}"></script>
 </body>
 </html>
