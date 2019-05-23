@@ -16,4 +16,4 @@ def list_lemmas(request):
     paginator = Paginator(all_lemmas, 12) # Show 12 lemmas per page
     page = request.GET.get('page')
     lemmas = paginator.get_page(page)
-    return render(request, 'rc_dic/index.html', {'lemmas': lemmas})
+    return render(request, 'rc_dic/lemmas.html', {'lemmas': lemmas})
