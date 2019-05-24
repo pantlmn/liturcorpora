@@ -68,7 +68,7 @@ class Token(models.Model):
     txt         = models.CharField(max_length=127, null=True, default=None)
     lemma       = models.ForeignKey(Lemma, on_delete=models.CASCADE, null=True, default=None)
     grammar_attributes  = models.CharField(max_length=64, null=True, default=None)
-    paradigm    = models.ForeignKey(Paradigm, null=True, default=None, on_delete=models.SET_NULL)
+    source      = models.ForeignKey(Source, on_delete=models.CASCADE, null=True, default=None)
 
     def __str__(self):
         return self.token_utf
@@ -169,28 +169,27 @@ def polyakov_import_all_lemmas():
 
 
 
-def import_all_tokens():
+def polyakov_import_all_tokens():
+    print ("Считываем все токены из словаря Полякова…")
     Token.objects.all().delete()
-    # connection = new_connection()
-    # cursor = connection.cursor()
-    # sql = "SELECT * FROM liturcorpora.polyakov_dic order by lex"
-    # cursor.execute(sql)
-    # tokens = []
-    # lemma_txt_prev = None
-    # for i in tqdm(range(cursor.rowcount)):
-    #     p = cursor.fetchone()
-    #     # print(p['lex'], p['word'])
-    #     if (p['lex'] != lemma_txt_prev):
-    #         lemma_txt_prev = p['lex']
-    #         lemma_obj = Lemma.objects.get(lemma_rc=p['lex'])
-    #     tokens += [Token(sort_key   = p['sort'],
-    #                     token_rc    = p['word'],
-    #                     lemma       = lemma_obj,
-    #                     part_of_speech = p['pos'],
-    #                     flex_type   = p['flex_type'],
-    #                     gram        = p['gram'])]
-    # Token.objects.bulk_create(tokens)
-    # connection.close()
+    lang = Language.objects.get(encoding='polyakov')
+    src = Source.objects.get(name='polyakov')
+    connection = new_connection()
+    cursor = connection.cursor()
+    tokens = []
+    for lemma in tqdm(Lemma.objects.all()):
+        cursor.execute("SELECT * from polyakov_dic where lex = ? ", (lemma.txt,))
+        for row in cursor:
+            tokens += [Token(language = lang,
+                            source = src,
+                            txt = row['word'],
+                            lemma = lemma,
+                            grammar_attributes = row['gram'],
+                        )]
+    Token.objects.bulk_create(tokens)
+    connection.close()
+    print ("Добавлено %d токенов. Готово." % len(tokens))
+
 
 
 def rebuild_all_polyakov():
@@ -201,6 +200,7 @@ def rebuild_all_polyakov():
     polyakov_import_tsv()
     polyakov_import_all_paradigms()
     polyakov_import_all_lemmas()
+    polyakov_import_all_tokens()
 
 
 def rebuild_all_data():
