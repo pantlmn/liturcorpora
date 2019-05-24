@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% include "rc_dic/link_css.html" %}
+    <title>Лемма «{{ lemma.txt }}» ruscorpora</title>
+</head>
+<body class="amber lighten-5">
+<nav>
+    <div class="nav-wrapper row deep-orange darken-4">
+        <div class="col s12 l8 offset-l2">
+            <a href="/" class="breadcrumb"><i class="material-icons">home</i></a>
+            <a href="/ruscorpora" class="breadcrumb">ruscorpora</a>
+            <a href="/ruscorpora/lemmas" class="breadcrumb">леммы</a>
+            <a href="#!" class="breadcrumb">{{ lemma.txt }}</a>
+        </div>
+    </div>
+</nav>
+
+<div class=row>
+<div class="col s12 m12 l8 offset-l2">
+    <h2 class="csl-rc">{{ lemma.txt }}</h2>
+    <h4 class="csl-rc">Грамматические характеристики: {{ lemma.grammar_attributes }}</h4>
+    <h4 class="csl-rc">Встречающиеся формы:</h4>
+    <div class="collection flow-text">
+        {% for token in tokens %}
+            <p class="collection-item csl-rc"><span class="brown-text text-darken-2">{{ token.txt }}</span>
+            <span class="brown-text text-lighten-1">({{ token.grammar_attributes }})</span></p>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% include "rc_dic/bottom_js.html" %}
+</body>
+</html>
