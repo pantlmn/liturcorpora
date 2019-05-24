@@ -81,6 +81,8 @@ def new_connection():
     return conn
 
 def polyakov_import_tsv():
+    fn = '../source_data/polyakov_dic.tsv'
+    print ("Забираем данные из файла словаря Полякова (%s)…" % fn)
     conn = new_connection()
     sql = """CREATE TABLE "polyakov_dic" (
     "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -97,37 +99,41 @@ def polyakov_import_tsv():
     cursor = conn.cursor()
     cursor.execute("DROP TABLE IF EXISTS polyakov_dic")
     cursor.execute(sql)
-    df = pandas.read_csv('../source_data/polyakov_dic.tsv', \
+    df = pandas.read_csv(fn, \
                         header = 0, \
                         quoting = 3, #QUOTE_NONE \
                         sep = '\t')
 
     df.to_sql('polyakov_dic', conn, index = False, if_exists = 'replace')
     conn.close()
+    print ("Готово.")
+
 
 
 def polyakov_import_all_paradigms():
+    print ("Считываем все парадигмы из словаря Полякова…")
     Paradigm.objects.all().delete()
     lang = Language.objects.get(encoding='polyakov')
     conn = new_connection()
     cursor = conn.cursor()
     sql = "SELECT distinct flex_type FROM polyakov_dic where flex_type IS NOT NULL and flex_type <> ''"
     cursor.execute(sql)
-    p = cursor.fetchone()
     paradigm_names = set()
-    while p:
-        candidates = set(re.split("[/]+", p['flex_type']))
+    for row in tqdm(cursor):
+        candidates = set(re.split("[/]+", row['flex_type']))
         paradigm_names |= candidates
-        p = cursor.fetchone()
     paradigm_names = paradigm_names - {''}
     paradigms = list(map(lambda p: Paradigm(language = lang, name = p),
                 paradigm_names))
+    print ("Добавляем %d парадигм." % len(paradigm_names), end = ' ')
     Paradigm.objects.bulk_create(paradigms)
     conn.close()
+    print ("Готово.")
 
 
 
 def polyakov_import_all_lemmas():
+    print ("Считываем все леммы из словаря Полякова…")
     Lemma.objects.all().delete()
     lang = Language.objects.get(encoding='polyakov')
     src = Source.objects.get(name='polyakov')
@@ -135,9 +141,8 @@ def polyakov_import_all_lemmas():
     cursor = connection.cursor()
     sql = "SELECT distinct lex, pos, flex_type FROM polyakov_dic"
     cursor.execute(sql)
-    row = cursor.fetchone()
     lemmas = []
-    while row:
+    for row in tqdm(cursor):
         if row['flex_type']:
             flex_types = set(re.split("[/]+", row['flex_type']))
             for f in flex_types:
@@ -157,9 +162,9 @@ def polyakov_import_all_lemmas():
                         grammar_attributes = row['pos'],
                         paradigm = None,
                         source = src)]
-        row = cursor.fetchone()
     Lemma.objects.bulk_create(lemmas)
     connection.close()
+    print ("Добавлено %d лемм. Готово." % len(lemmas))
 
 
 
