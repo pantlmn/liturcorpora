@@ -46,7 +46,7 @@
 <div class="col s12 m12 l8 offset-l2">
 <div class="collection flow-text">
     {% for lemma in lemmas %}
-        <a href="#!" class="collection-item csl-rc brown-text text-darken-2">{{ lemma.lemma_rc }}</a>
+        <a href="{{ lemma.pk }}/" class="collection-item csl-rc brown-text text-darken-2">{{ lemma.txt }}</a>
     {% endfor %}
 </div>
 </div>
