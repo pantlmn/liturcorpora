@@ -5,5 +5,6 @@ from . import views
 app_name = 'rc_dic'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('lemmas', views.list_lemmas, name='list_lemmas'),
+    path('ruscorpora', views.index, name='index'),
+    path('ruscorpora/lemmas', views.list_lemmas, name='list_lemmas'),
 ]
