@@ -28,6 +28,15 @@
             <span class="brown-text text-lighten-1">({{ token.grammar_attributes }})</span></p>
         {% endfor %}
     </div>
+    {% if possible_tokens %}
+    <h4 class="csl-rc">Возможные формы <span class="brown-text text-lighten-1">(по парадигме {{ lemma.paradigm.name }})</span>:</h4>
+    <div class="collection flow-text">
+        {% for gram, token in possible_tokens.items %}
+            <p class="collection-item csl-rc"><span class="brown-text text-darken-2">{{ token }}*</span>
+            <span class="brown-text text-lighten-1">({{ gram }})</span></p>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 </div>
 {% include "rc_dic/bottom_js.html" %}
