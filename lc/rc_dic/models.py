@@ -61,6 +61,9 @@ class Lemma(models.Model):
     def __str__(self):
         return self.txt
 
+    # def generate_forms(self):
+    #     from gen import generate_forms as gf
+    #     return gf(self.txt, self.paradigm.name)
 
 
 class Token(models.Model):
