@@ -4,6 +4,11 @@ import pandas
 import re
 from tqdm import tqdm
 
+import importlib.util
+spec = importlib.util.spec_from_file_location("generate_word_forms", 'rc_dic/generate_word_forms.py')
+generate_word_forms = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(generate_word_forms)
+
 
 class Language(models.Model):
     """Языки, диалекты и их кодировки"""
@@ -61,9 +66,10 @@ class Lemma(models.Model):
     def __str__(self):
         return self.txt
 
-    # def generate_forms(self):
-    #     from gen import generate_forms as gf
-    #     return gf(self.txt, self.paradigm.name)
+    def generate_forms(self):
+        possible_tokens = generate_word_forms.generate_forms(self.txt, self.paradigm.name)
+        return possible_tokens
+
 
 
 class Token(models.Model):
