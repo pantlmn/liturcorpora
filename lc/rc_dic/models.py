@@ -4,10 +4,10 @@ import pandas
 import re
 from tqdm import tqdm
 
-import importlib.util
-spec = importlib.util.spec_from_file_location("generate_word_forms", 'rc_dic/generate_word_forms.py')
-generate_word_forms = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(generate_word_forms)
+from .modules.generate import generate_word_forms
+# spec = importlib.util.spec_from_file_location("generate_word_forms", 'rc_dic/generate_word_forms.py')
+# generate_word_forms = importlib.util.module_from_spec(spec)
+# spec.loader.exec_module(generate_word_forms)
 
 
 class Language(models.Model):
@@ -67,7 +67,7 @@ class Lemma(models.Model):
         return self.txt
 
     def generate_forms(self):
-        possible_tokens = generate_word_forms.generate_forms(self.txt, self.paradigm.name)
+        possible_tokens = generate_word_forms(self.txt, self.paradigm.name)
         return possible_tokens
 
 
