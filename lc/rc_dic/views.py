@@ -5,14 +5,9 @@ from django.urls import reverse
 from django.views import generic
 from django.core.paginator import Paginator
 from django.db.models import Q
-
+import re
 from .models import Lemma, Token
 
-import importlib.util
-spec = importlib.util.spec_from_file_location("generate_word_forms", 'rc_dic/generate_word_forms.py')
-generate_word_forms = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(generate_word_forms)
-# from gen import generate_forms
 
 
 def index(request):
@@ -31,17 +26,26 @@ def list_lemmas(request):
 
 def lemma_info(request, lemma_id):
     lemma = Lemma.objects.get(pk=lemma_id)
+    tokens = Token.objects.filter(lemma = lemma).order_by('txt')
     try:
-        possible_tokens = generate_word_forms.generate_forms(lemma.txt, lemma.paradigm.name)
+        possible_tokens = lemma.generate_forms()
+        possible_tokens.update({k : possible_tokens[k].rstrip('^') for k in possible_tokens.keys()})
+        unused_tokens_set = set(possible_tokens.values()) - set(t.txt for t in tokens)
+        unused_tokens_dict = {}
+        for gram, txt in possible_tokens.items():
+            if re.match(r"^[^=].*", txt):
+                gram = re.sub(r"\.[0-9]", "", gram)
+                gram = re.sub("\+", ",", gram)
+                if txt in unused_tokens_set:
+                    if txt in unused_tokens_dict:
+                        new_gram = unused_tokens_dict[txt] + " | " + gram
+                        unused_tokens_dict.update({txt : new_gram})
+                    else:
+                        unused_tokens_dict.update({txt : gram})
     except:
         possible_tokens = None
-    possible_tokens.update({k : possible_tokens[k].rstrip('^') for k in possible_tokens.keys()})
-    tokens = Token.objects.filter(lemma = lemma)
-    for t in tokens:
-        if t.grammar_attributes in possible_tokens:
-            if t.txt == possible_tokens[t.grammar_attributes]:
-                possible_tokens.pop(t.grammar_attributes, None)
+        unused_tokens_dict = None
     return render(request, 'rc_dic/lemma.html',
                 {'lemma': lemma,
                 'tokens' : tokens,
-                'possible_tokens' : possible_tokens})
+                'unused_tokens' : unused_tokens_dict})
