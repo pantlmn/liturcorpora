@@ -1530,7 +1530,7 @@ def match_word(word, paradigm):
     if re.match(word, paradigms[paradigm]['core']):
         return True
 
-def generate_forms(word, paradigm):
+def generate_word_forms(word, paradigm):
     #print (word)
     forms = {}
     paradigm_head = paradigm_types[paradigms[paradigm]['type']].split('\t') # list of grammatical forms relevant for variable "paradigm"
