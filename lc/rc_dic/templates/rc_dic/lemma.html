@@ -12,7 +12,6 @@
             <a href="/" class="breadcrumb"><i class="material-icons">home</i></a>
             <a href="/ruscorpora" class="breadcrumb">ruscorpora</a>
             <a href="/ruscorpora/lemmas" class="breadcrumb">леммы</a>
-            <a href="#!" class="breadcrumb">{{ lemma.txt }}</a>
         </div>
     </div>
 </nav>
@@ -43,6 +42,20 @@
             <p class="collection-item csl-rc"><span class="brown-text text-darken-2">{{ token }}*</span>
             <span class="brown-text text-lighten-1">({{ gram }})</span></p>
         {% endfor %}
+    </div>
+    {% endif %}
+    {% if prev_lemma %}
+    <div class="left">
+        <ul class="pagination">
+        <li class="waves-effect"><a href="../{{ prev_lemma.pk }}/"><span class="csl-rc inline-icon"><i class="material-icons">chevron_left</i>{{ prev_lemma.txt }}</span></a></li>
+        </ul>
+    </div>
+    {% endif %}
+    {% if next_lemma %}
+    <div class="right">
+        <ul class="pagination">
+        <li class="waves-effect"><a href="../{{ next_lemma.pk }}/"><span class="csl-rc inline-icon">{{ next_lemma.txt }}<i class="material-icons">chevron_right</i></span></a></li>
+        </ul>
     </div>
     {% endif %}
 </div>
