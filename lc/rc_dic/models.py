@@ -5,9 +5,6 @@ import re
 from tqdm import tqdm
 
 from .modules.generate import generate_word_forms
-# spec = importlib.util.spec_from_file_location("generate_word_forms", 'rc_dic/generate_word_forms.py')
-# generate_word_forms = importlib.util.module_from_spec(spec)
-# spec.loader.exec_module(generate_word_forms)
 
 
 class Language(models.Model):
