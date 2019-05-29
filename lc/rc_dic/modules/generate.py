@@ -519,13 +519,13 @@ paradigms = {
 'A1sk' : {
 	'type' : 'A1',
 	'core' : r'(.*)(ск)()(ій)',
-	'inflex' : 'ск|ст|#сч',
+	'inflex' : 'ск|ст|сч',
 	'flex' : 'ій	ъ	о	а	у	2ѣ	имъ	а	у	и	2ѣ	ою	2ы/2и	и^	а^	ихъ	имъ^	ими	а^	2ѣ^	у^	ома	ій	ое	агѡ	аго	ому	2ѣмъ/омъ	ая	ую	ія	2ѣй/2ей/ой	2ыи/2іи/іи	ія^	ая^	ая^	2ѣи	ую^	има	3ай+$A1sh	-	3е	іе'
 	},
 'A1ck' : {
 	'type' : 'A1',
-	'core' : r'(.*)()()(ій)',
-	'inflex' : 'цк|цт|#цч',
+	'core' : r'(.*)(цк)()(ій)',
+	'inflex' : 'цк|цт|цч',
 	'flex' : 'ій	ъ	о	а	у	2ѣ	имъ	а	у	и	2ѣ	ою	2ы/2и	и^	а^	ихъ	имъ^	ими	а^	2ѣ^	у^	ома	ій	ое	агѡ	аго	ому	2ѣмъ/омъ	ая	ую	ія	2ѣй/2ей/ой	2ыи/2іи/іи	ія^	ая^	ая^	2ѣи	ую^	има	3ай+$A1sh	-	3е	іе'
 	},
 'A1g' : {
@@ -1551,7 +1551,7 @@ def generate_word_forms(word, paradigm):
                 subparadigm = re.split(r'(\+\$|\$)', ending)
                 subword = re.sub(paradigms[paradigm]['core'], r'\1' +
                               inflices[inflex_no] + r'\3' + subparadigm[0], word)
-                subforms = generate_forms(subword+"#", subparadigm[2])
+                subforms = generate_word_forms(subword+"#", subparadigm[2])
                 for subgramm, subform in subforms.items():
                     forms.update({gramm_form+'+'+subgramm : subform})
                 do_update = False
@@ -1564,7 +1564,7 @@ def generate_word_forms(word, paradigm):
                 subparadigm = re.split(r'(\+\$|\$)', ending)
                 subword = re.sub(paradigms[paradigm]['core'], r'\1' +
                               inflices[0] + r'\3' + subparadigm[0], word)
-                subforms = generate_forms(subword+"#", subparadigm[2])
+                subforms = generate_word_forms(subword+"#", subparadigm[2])
                 #print (subword)
                 #print (subparadigm)
                 #print (subforms)
@@ -1583,7 +1583,7 @@ def generate_word_forms(word, paradigm):
     return forms
 
 def generate_forms_and_print(word, paradigm):
-    forms = generate_forms(word, paradigm)
+    forms = generate_word_forms(word, paradigm)
     for gramm, form in forms.items():
         print('%s %s' % (gramm.ljust(20), form))
 
