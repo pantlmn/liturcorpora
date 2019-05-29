@@ -45,7 +45,25 @@ def lemma_info(request, lemma_id):
     except:
         possible_tokens = None
         unused_tokens_dict = None
+    prev_lemmas = Lemma.objects.filter(~Q(txt__contains="#")
+                                    & ~Q(txt__contains="+")
+                                    & Q(txt__lt = lemma.txt)).order_by('-txt')
+    try:
+        prev_lemma = prev_lemmas[0]
+    except:
+        prev_lemma = None
+    next_lemmas = Lemma.objects.filter(~Q(txt__contains="#")
+                                    & ~Q(txt__contains="+")
+                                    & Q(txt__gt = lemma.txt)).order_by('txt')
+    try:
+        next_lemma = next_lemmas[0]
+    except:
+        next_lemma = None
+
     return render(request, 'rc_dic/lemma.html',
                 {'lemma': lemma,
                 'tokens' : tokens,
-                'unused_tokens' : unused_tokens_dict})
+                'unused_tokens' : unused_tokens_dict,
+                'prev_lemma' : prev_lemma,
+                'next_lemma' : next_lemma,
+                })
