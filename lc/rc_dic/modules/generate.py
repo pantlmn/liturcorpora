@@ -1527,63 +1527,75 @@ paradigms = {
 }
 
 
+def find_matching_paradigms(word, paradigm):
+    matching_paradigms = []
+    for pd in paradigms.keys():
+        if (re.match("^" + re.escape(paradigm) + "$", pd) is not None) or (re.match("^" + re.escape(paradigm) + "-[a-z]$", pd) is not None):
+            if re.match(paradigms[pd]['core'], word):
+                matching_paradigms += [pd]
+    return matching_paradigms
+
 def generate_word_forms(word, paradigm):
-    # if not (paradigm in paradigms):
-    #     return None
-    if not re.match(paradigms[paradigm]['core'], word):
-        return None
-    #print (word)
-    forms = {}
-    paradigm_head = paradigm_types[paradigms[paradigm]['type']].split('\t') # list of grammatical forms relevant for variable "paradigm"
-    inflices = paradigms[paradigm]['inflex'].split('|') # list of inflexes relevant for variable "paradigm"
-    for gramm_form, endings in zip(paradigm_head, paradigms[paradigm]['flex'].split('\t')):
-        endings = endings.split('/') # list of flexes possible for a single grammatical form
-        variants = len(endings)
-        for variant_no, ending in enumerate(endings, 1):
-            do_update = True
-            if re.match(r'^=.*', ending):
-                form = ending
-            elif re.match('^-$', ending):
-                form = ending
-                do_update = False
-            elif re.match(r'^[1-9].*', ending) and re.search('\$', ending):
-                inflex_no = int(ending[0]) - 1
-                ending = ending[1:]
-                subparadigm = re.split(r'(\+\$|\$)', ending)
-                subword = re.sub(paradigms[paradigm]['core'], r'\1' +
-                              inflices[inflex_no] + r'\3' + subparadigm[0], word)
-                subforms = generate_word_forms(subword+"#", subparadigm[2])
-                for subgramm, subform in subforms.items():
-                    forms.update({gramm_form+'+'+subgramm : subform})
-                do_update = False
-            elif re.match(r'^[1-9].*', ending):
-                inflex_no = int(ending[0]) - 1
-                ending = ending[1:]
-                form = re.sub(paradigms[paradigm]['core'], r'\1' +
-                              inflices[inflex_no] + r'\3' + ending, word)
-            elif re.search('\$', ending):
-                subparadigm = re.split(r'(\+\$|\$)', ending)
-                subword = re.sub(paradigms[paradigm]['core'], r'\1' +
-                              inflices[0] + r'\3' + subparadigm[0], word)
-                subforms = generate_word_forms(subword+"#", subparadigm[2])
-                #print (subword)
-                #print (subparadigm)
-                #print (subforms)
-                for subgramm, subform in subforms.items():
-                    forms.update({gramm_form+'+'+subgramm : subform})
-                do_update = False
-            else:
-                form = re.sub(paradigms[paradigm]['core'], r'\1' +
-                              inflices[0] + r'\3' + ending, word)
-            if variants > 1:
-                gramm = gramm_form + ".%d" % variant_no
-            else:
-                gramm = gramm_form
-            if re.match("й[ъьаеиоуюя]", gramm_form):
-                do_update = False
-            if do_update:
-                forms.update({gramm: form})
-    return forms
+    possible_paradigms = find_matching_paradigms(word, paradigm)
+    print ("Слово «%s» может изменяться по парадигмам: %s" % (word, ", ".join(possible_paradigms)))
+    all_forms = []
+    # for paradigm in possible_paradigms:
+    for paradigm in possible_paradigms:
+        forms = {}
+        paradigm_head = paradigm_types[paradigms[paradigm]['type']].split('\t') # list of grammatical forms relevant for variable "paradigm"
+        inflices = paradigms[paradigm]['inflex'].split('|') # list of inflexes relevant for variable "paradigm"
+        for gramm_form, endings in zip(paradigm_head, paradigms[paradigm]['flex'].split('\t')):
+            endings = endings.split('/') # list of flexes possible for a single grammatical form
+            variants = len(endings)
+            for variant_no, ending in enumerate(endings, 1):
+                do_update = True
+                if re.match(r'^=.*', ending):
+                    form = ending
+                elif re.match('^-$', ending):
+                    form = ending
+                    do_update = False
+                elif re.match(r'^[1-9].*', ending) and re.search('\$', ending):
+                    inflex_no = int(ending[0]) - 1
+                    ending = ending[1:]
+                    subparadigm = re.split(r'(\+\$|\$)', ending)
+                    subword = re.sub(paradigms[paradigm]['core'], r'\1' +
+                                  inflices[inflex_no] + r'\3' + subparadigm[0], word)
+                    subforms = generate_word_forms(subword+"#", subparadigm[2])[0]
+                    for subgramm, subform in subforms.items():
+                        forms.update({gramm_form+'+'+subgramm : subform})
+                    do_update = False
+                elif re.match(r'^[1-9].*', ending):
+                    inflex_no = int(ending[0]) - 1
+                    ending = ending[1:]
+                    form = re.sub(paradigms[paradigm]['core'], r'\1' +
+                                  inflices[inflex_no] + r'\3' + ending, word)
+                elif re.search('\$', ending):
+                    subparadigm = re.split(r'(\+\$|\$)', ending)
+                    subword = re.sub(paradigms[paradigm]['core'], r'\1' +
+                                  inflices[0] + r'\3' + subparadigm[0], word)
+                    subforms = generate_word_forms(subword+"#", subparadigm[2])[0]
+                    print (subword)
+                    print (subparadigm)
+                    print (subforms)
+                    for subgramm, subform in subforms.items():
+                        forms.update({gramm_form+'+'+subgramm : subform})
+                    do_update = False
+                else:
+                    form = re.sub(paradigms[paradigm]['core'], r'\1' +
+                                  inflices[0] + r'\3' + ending, word)
+                if variants > 1:
+                    gramm = gramm_form + ".%d" % variant_no
+                else:
+                    gramm = gramm_form
+                if do_update:
+                    forms.update({gramm: form})
+        good_forms = forms.copy()
+        for k in forms:
+            if re.search(r"й[ъьаеиоуюыя]", forms[k]):
+                good_forms.pop(k, None)
+        all_forms += [good_forms]
+    return all_forms
+
 
 def generate_forms_and_print(word, paradigm):
     forms = generate_word_forms(word, paradigm)

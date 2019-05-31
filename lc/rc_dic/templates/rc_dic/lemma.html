@@ -36,7 +36,7 @@
         {% endfor %}
     </div>
     {% if unused_tokens %}
-    <h4 class="csl-rc">Другие возможные формы <span class="brown-text text-lighten-1">(по парадигме {{ lemma.paradigm.name }})</span>:</h4>
+    <h4 class="csl-rc">Другие возможные формы <span class="brown-text text-lighten-1">({{ paradigms }})</span>:</h4>
     <div class="collection flow-text">
         {% for token, gram in unused_tokens.items %}
             <p class="collection-item csl-rc"><span class="brown-text text-darken-2">{{ token }}*</span>
