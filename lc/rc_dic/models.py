@@ -4,7 +4,7 @@ import pandas
 import re
 from tqdm import tqdm
 
-from .modules.generate import generate_word_forms
+from .modules.generate import generate_word_forms, find_matching_paradigms
 
 
 class Language(models.Model):
@@ -64,8 +64,18 @@ class Lemma(models.Model):
         return self.txt
 
     def generate_forms(self):
-        possible_tokens = generate_word_forms(self.txt, self.paradigm.name)
-        return possible_tokens
+        try:
+            forms = generate_word_forms(self.txt, self.paradigm.name)
+        except:
+            forms = None
+        return forms
+
+    def paradigms(self):
+        try:
+            p = find_matching_paradigms(self.txt, self.paradigm.name)
+        except:
+            p = []
+        return p
 
 
 
