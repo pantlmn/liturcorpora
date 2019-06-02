@@ -13,6 +13,9 @@ from .models import Lemma, Token
 def index(request):
     return render(request, 'rc_dic/main_index.html', {})
 
+def robots(request):
+    return render(request, 'rc_dic/robots.txt', content_type="text/plain")
+
 # from gererate_word_forms import generate_forms
 
 
