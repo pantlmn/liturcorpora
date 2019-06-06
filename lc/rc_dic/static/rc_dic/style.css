@@ -60,3 +60,16 @@ p, ul, li, h1, h2, h3, h4, h5 {
 .inline-icon {
    vertical-align: top;
 }
+/* label focus color */
+.input-field input:focus + label {
+	color: #bf360c !important;
+}
+/* label underline focus color */
+.row .input-field input:focus {
+	border-bottom: 2px solid #bf360c !important;
+	box-shadow: 0 0px 0 0  !important
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+	color: #bf360c !important;
+}
