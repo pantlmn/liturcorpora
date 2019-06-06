@@ -18,10 +18,12 @@ def robots(request):
 
 # from gererate_word_forms import generate_forms
 
+LEMMAS_PER_PAGE = 12 # Show 12 lemmas per page
+
 
 def list_lemmas(request):
     all_lemmas = Lemma.objects.filter(~Q(txt__contains="#") & ~Q(txt__contains="+") ).order_by('txt')
-    paginator = Paginator(all_lemmas, 12) # Show 12 lemmas per page
+    paginator = Paginator(all_lemmas, LEMMAS_PER_PAGE)
     page = request.GET.get('page')
     lemmas = paginator.get_page(page)
     return render(request, 'rc_dic/lemmas.html', {'lemmas': lemmas})
@@ -87,3 +89,14 @@ def lemma_info(request, lemma_id):
                 'prev_lemma' : prev_lemma,
                 'next_lemma' : next_lemma,
                 })
+
+
+def find_word(request):
+    all_lemmas = Lemma.objects.filter(~Q(txt__contains="#")
+                                    & ~Q(txt__contains="+")
+                                    & Q(txt__contains=request.GET['q'])
+                                ).order_by('txt')
+    paginator = Paginator(all_lemmas, LEMMAS_PER_PAGE)
+    page = request.GET.get('page')
+    lemmas = paginator.get_page(page)
+    return render(request, 'rc_dic/lemmas.html', {'lemmas': lemmas, 'q' : request.GET['q']})
