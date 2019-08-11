@@ -92,12 +92,12 @@ class Token(models.Model):
 
 
 def new_connection():
-    conn = sqlite3.connect("../source_data/source.sqlite")
+    conn = sqlite3.connect("../source_data/rc_dic/source.sqlite")
     conn.row_factory=sqlite3.Row
     return conn
 
 def polyakov_import_tsv():
-    fn = '../source_data/polyakov_dic.tsv'
+    fn = '../source_data/rc_dic/polyakov_dic.tsv'
     print ("Забираем данные из файла словаря Полякова (%s)…" % fn)
     conn = new_connection()
     sql = """CREATE TABLE "polyakov_dic" (
@@ -209,8 +209,8 @@ def polyakov_import_all_tokens():
 
 
 def rebuild_all_polyakov():
-    Language.objects.filter(encoding='polyakov').delete()
-    Language(name       = 'csl_new',
+    Language.objects.filter(name='csl_polyakov').delete()
+    Language(name       = 'csl_polyakov',
              name_long  = 'церковнославянский синодального периода',
              encoding   = 'polyakov').save()
     polyakov_import_tsv()
