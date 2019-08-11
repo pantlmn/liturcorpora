@@ -1,5 +1,0 @@
-.open source.sqlite
-.output polyakov_dic_data.tsv
-.mode tabs
-select * from polyakov_dic;
-.exit
