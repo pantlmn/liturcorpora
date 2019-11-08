@@ -1537,7 +1537,7 @@ def find_matching_paradigms(word, paradigm):
 
 def generate_word_forms(word, paradigm):
     possible_paradigms = find_matching_paradigms(word, paradigm)
-    print ("Слово «%s» может изменяться по парадигмам: %s" % (word, ", ".join(possible_paradigms)))
+    # print ("Слово «%s» может изменяться по парадигмам: %s" % (word, ", ".join(possible_paradigms)))
     all_forms = []
     # for paradigm in possible_paradigms:
     for paradigm in possible_paradigms:
@@ -1574,9 +1574,9 @@ def generate_word_forms(word, paradigm):
                     subword = re.sub(paradigms[paradigm]['core'], r'\1' +
                                   inflices[0] + r'\3' + subparadigm[0], word)
                     subforms = generate_word_forms(subword+"#", subparadigm[2])[0]
-                    print (subword)
-                    print (subparadigm)
-                    print (subforms)
+                    # print (subword)
+                    # print (subparadigm)
+                    # print (subforms)
                     for subgramm, subform in subforms.items():
                         forms.update({gramm_form+'+'+subgramm : subform})
                     do_update = False
