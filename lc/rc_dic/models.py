@@ -9,9 +9,12 @@ from .modules.generate import generate_word_forms, find_matching_paradigms
 
 class Language(models.Model):
     """Языки, диалекты и их кодировки"""
-    name  = models.CharField(max_length=12, unique=True)
+    name  = models.CharField(max_length=12, null=True, default=None)
     name_long   = models.CharField(max_length=45, null=True, default=None)
     encoding    = models.CharField(max_length=12, null=True, default=None)
+    class Meta:
+            unique_together = [['name', 'encoding']]
+
 
     def __str__(self):
         return self.name_long + " (" + self.encoding + ")"
@@ -209,8 +212,8 @@ def polyakov_import_all_tokens():
 
 
 def rebuild_all_polyakov():
-    Language.objects.filter(name='csl_polyakov').delete()
-    Language(name       = 'csl_polyakov',
+    Language.objects.filter(name='csl', encoding='polyakov').delete()
+    Language(name       = 'csl',
              name_long  = 'церковнославянский синодального периода',
              encoding   = 'polyakov').save()
     polyakov_import_tsv()

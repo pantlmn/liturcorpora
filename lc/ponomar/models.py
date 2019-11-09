@@ -29,10 +29,43 @@ class Chapter(models.Model):
         return self.name_long + " (" + self.language + ")"
 
 
+# class PageRef(models.Model):
+#     """Отсылка к странице или листу в богослужебной книге"""
+#     PAGE = 'p'
+#     FOLIO = 'f'
+#     PAGINATION_TYPE_CHOICES = [
+#         (PAGE, 'стр.'),
+#         (FOLIO, 'л.'),
+#     ]
+#     book        = models.ForeignKey(Book, default=None, null=True, on_delete=models.CASCADE)
+#     pagination_type = models.CharField(
+#         max_length=1,
+#         choices=PAGINATION_TYPE_CHOICES,
+#         default=PAGE)
+#     number_str  = models.CharField(max_length=8, null=True, default=None) # арабскими
+#     label_str   = models.CharField(max_length=16, null=True, default=None) # славянскими
+#     path        = models.CharField(max_length=256, null=True, default=None)
+#     order_id    = models.IntegerField(null=False, default=0)
+# 
+#     def __str__(self):
+#         return dict(PAGINATION_TYPE_CHOICES)[self.pagination_type] + ' ' + self.number_str
+
+class Paragraph(models.Model):
+    """Абзац в богослужебном последовании, со всеми xml тегами"""
+    chapter     = models.ForeignKey(Chapter, default=None, null=True, on_delete=models.CASCADE)
+    txt         = models.TextField(null=True, default=None)
+    order_id    = models.IntegerField(null=False, default=0)
+
+    def __str__(self):
+        return self.txt
+
+
+
+
 def ponomar_import_all_books():
     print ("Составляем список книг в репозитории…")
     Book.objects.all().delete()
-    lang = Language.objects.get(name='csl_utf')
+    lang = Language.objects.get(name='csl', encoding='utf')
     path = "../source_data/ponomar/"
     books = []
     for dirname in os.listdir(path):
@@ -53,7 +86,7 @@ def ponomar_import_all_books():
 def ponomar_import_all_chapters():
     print ("Составляем список последований в репозитории…")
     Chapter.objects.all().delete()
-    lang = Language.objects.get(name='csl_utf')
+    lang = Language.objects.get(name='csl', encoding='utf')
     path = "../source_data/ponomar/"
     chapters = []
     for dirname in os.listdir(path):
@@ -81,4 +114,16 @@ def ponomar_import_all_chapters():
                         order_id += 1
     print ("Добавляем %d последований." % len(chapters), end = ' ')
     Chapter.objects.bulk_create(chapters)
+    print ("Готово.")
+
+
+def ponomar_import_all_paragraphs():
+    # надо будет учесть: из culiturgical.dtd
+    # * язык документа
+    # * язык абзаца
+    # * разбиение по страницам
+    # * отсылки на img
+    # * киноварь
+    # * сноски
+    # * заголовки
     print ("Готово.")
