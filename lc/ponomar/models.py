@@ -51,22 +51,24 @@ class Chapter(models.Model):
 #         return dict(PAGINATION_TYPE_CHOICES)[self.pagination_type] + ' ' + self.number_str
 
 class Paragraph(models.Model):
-    """Абзац в богослужебном последовании, со всеми xml тегами"""
+    """Абзац в богослужебном последовании, со всеми xml тегами и без них"""
     chapter     = models.ForeignKey(Chapter, default=None, null=True, on_delete=models.CASCADE)
-    txt         = models.TextField(null=True, default=None)
+    txt_raw     = models.TextField(null=True, default=None)
+    txt_plain   = models.TextField(null=True, default=None)
     order_id    = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return self.txt
+        return self.txt_plain
 
 
-
+def source_base_path():
+    return "../source_data/ponomar/"
 
 def ponomar_import_all_books():
     print ("Составляем список книг в репозитории…")
     Book.objects.all().delete()
     lang = Language.objects.get(name='csl', encoding='utf')
-    path = "../source_data/ponomar/"
+    path = source_base_path()
     books = []
     for dirname in os.listdir(path):
         if (not dirname.startswith('.')) and os.path.isdir(path + dirname):
@@ -87,7 +89,7 @@ def ponomar_import_all_chapters():
     print ("Составляем список последований в репозитории…")
     Chapter.objects.all().delete()
     lang = Language.objects.get(name='csl', encoding='utf')
-    path = "../source_data/ponomar/"
+    path = source_base_path()
     chapters = []
     for dirname in os.listdir(path):
         if (not dirname.startswith('.')) and os.path.isdir(path + dirname):
@@ -126,4 +128,19 @@ def ponomar_import_all_paragraphs():
     # * киноварь
     # * сноски
     # * заголовки
+    print ("Считываем все абзацы всех книг…")
+    path = source_base_path()
+    paragraphs = []
+    for ch in Chapter.objects.all():
+        print ("Считываем %s%s…" % (path, ch.path))
+        with open(path + ch.path, 'r') as f:
+            order_id = 1
+            soup = BeautifulSoup(f, "html.parser")
+            for p in soup.findAll('p'):
+                paragraphs += [Paragraph(chapter = ch, 
+                    txt_raw = str(p),
+                    txt_plain = p.get_text(),
+                    order_id = order_id)]
+    print ("Добавляем %d абзацев." % len(paragraphs))
+    Paragraph.objects.bulk_create(paragraphs)
     print ("Готово.")
