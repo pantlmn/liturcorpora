@@ -54,7 +54,7 @@ class Paragraph(models.Model):
     """Абзац в богослужебном последовании, со всеми xml тегами и без них"""
     chapter     = models.ForeignKey(Chapter, default=None, null=True, on_delete=models.CASCADE)
     txt_raw     = models.TextField(null=True, default=None)
-    txt_plain   = models.TextField(null=True, default=None)
+    # txt_plain   = models.TextField(null=True, default=None)
     order_id    = models.IntegerField(null=False, default=0)
 
     def __str__(self):
@@ -138,9 +138,10 @@ def ponomar_import_all_paragraphs():
             soup = BeautifulSoup(f, "html.parser")
             for p in soup.findAll('p'):
                 paragraphs += [Paragraph(chapter = ch, 
-                    txt_raw = str(p),
-                    txt_plain = p.get_text(),
+                    txt_raw = "".join([str(x) for x in p.contents]),
+                    # txt_plain = p.get_text(),
                     order_id = order_id)]
+                order_id += 1
     print ("Добавляем %d абзацев." % len(paragraphs))
     Paragraph.objects.bulk_create(paragraphs)
     print ("Готово.")
