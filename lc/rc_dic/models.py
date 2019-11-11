@@ -212,8 +212,8 @@ def polyakov_import_all_tokens():
 
 
 def rebuild_all_polyakov():
-    Language.objects.filter(name='csl', encoding='polyakov').delete()
-    Language(name       = 'csl',
+    Language.objects.filter(name='cu', encoding='polyakov').delete()
+    Language(name       = 'cu',
              name_long  = 'церковнославянский синодального периода',
              encoding   = 'polyakov').save()
     polyakov_import_tsv()

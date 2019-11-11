@@ -44,7 +44,7 @@ class Chapter(models.Model):
 #         default=PAGE)
 #     number_str  = models.CharField(max_length=8, null=True, default=None) # арабскими
 #     label_str   = models.CharField(max_length=16, null=True, default=None) # славянскими
-#     path        = models.CharField(max_length=256, null=True, default=None)
+#     img_path        = models.CharField(max_length=256, null=True, default=None)
 #     order_id    = models.IntegerField(null=False, default=0)
 # 
 #     def __str__(self):
@@ -58,7 +58,23 @@ class Paragraph(models.Model):
     order_id    = models.IntegerField(null=False, default=0)
 
     def __str__(self):
-        return self.txt_plain
+        return self.txt_raw
+
+class Fragment(models.Model):
+    """Фрагмент абзаца: один цвет, один язык, основной текст или сноска"""
+    CHERNILA = 'b' # black
+    KINOVAR = 'r'  # red
+    TEXT_COLOR_CHOICES = [
+        (CHERNILA, 'чернила'),
+        (KINOVAR, 'киноварь'),
+    ]
+    txt         = models.TextField(null=True, default=None)
+    paragraph   = models.ForeignKey(Paragraph, default=None, null=True, on_delete=models.CASCADE)
+    language    = models.ForeignKey(Language, default=None, null=True, on_delete=models.CASCADE)
+    text_color = models.CharField(
+        max_length=1,
+        choices=TEXT_COLOR_CHOICES,
+        default=CHERNILA)
 
 
 def source_base_path():
