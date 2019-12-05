@@ -1,6 +1,5 @@
 from django.db import models
 import sqlite3
-import pandas
 import re
 from tqdm import tqdm
 import os
@@ -60,21 +59,21 @@ class Paragraph(models.Model):
     def __str__(self):
         return self.txt_raw
 
-class Fragment(models.Model):
-    """Фрагмент абзаца: один цвет, один язык, основной текст или сноска"""
-    CHERNILA = 'b' # black
-    KINOVAR = 'r'  # red
-    TEXT_COLOR_CHOICES = [
-        (CHERNILA, 'чернила'),
-        (KINOVAR, 'киноварь'),
-    ]
-    txt         = models.TextField(null=True, default=None)
-    paragraph   = models.ForeignKey(Paragraph, default=None, null=True, on_delete=models.CASCADE)
-    language    = models.ForeignKey(Language, default=None, null=True, on_delete=models.CASCADE)
-    text_color = models.CharField(
-        max_length=1,
-        choices=TEXT_COLOR_CHOICES,
-        default=CHERNILA)
+# class Fragment(models.Model):
+#     """Фрагмент абзаца: один цвет, один язык, основной текст или сноска"""
+#     CHERNILA = 'b' # black
+#     KINOVAR = 'r'  # red
+#     TEXT_COLOR_CHOICES = [
+#         (CHERNILA, 'чернила'),
+#         (KINOVAR, 'киноварь'),
+#     ]
+#     txt         = models.TextField(null=True, default=None)
+#     paragraph   = models.ForeignKey(Paragraph, default=None, null=True, on_delete=models.CASCADE)
+#     language    = models.ForeignKey(Language, default=None, null=True, on_delete=models.CASCADE)
+#     text_color = models.CharField(
+#         max_length=1,
+#         choices=TEXT_COLOR_CHOICES,
+#         default=CHERNILA)
 
 
 def source_base_path():
@@ -83,7 +82,7 @@ def source_base_path():
 def ponomar_import_all_books():
     print ("Составляем список книг в репозитории…")
     Book.objects.all().delete()
-    lang = Language.objects.get(name='csl', encoding='utf')
+    lang = Language.objects.get(name='cu', encoding='utf')
     path = source_base_path()
     books = []
     for dirname in os.listdir(path):
@@ -104,7 +103,7 @@ def ponomar_import_all_books():
 def ponomar_import_all_chapters():
     print ("Составляем список последований в репозитории…")
     Chapter.objects.all().delete()
-    lang = Language.objects.get(name='csl', encoding='utf')
+    lang = Language.objects.get(name='cu', encoding='utf')
     path = source_base_path()
     chapters = []
     for dirname in os.listdir(path):
@@ -136,14 +135,7 @@ def ponomar_import_all_chapters():
 
 
 def ponomar_import_all_paragraphs():
-    # надо будет учесть: из culiturgical.dtd
-    # * язык документа
-    # * язык абзаца
-    # * разбиение по страницам
-    # * отсылки на img
-    # * киноварь
-    # * сноски
-    # * заголовки
+    """Считывает все абзацы по главам, снимает внешний <p>"""
     print ("Считываем все абзацы всех книг…")
     path = source_base_path()
     paragraphs = []
@@ -160,4 +152,38 @@ def ponomar_import_all_paragraphs():
                 order_id += 1
     print ("Добавляем %d абзацев." % len(paragraphs))
     Paragraph.objects.bulk_create(paragraphs)
+    print ("Готово.")
+
+
+def is_kinovar_start_candidate(s):
+    if s == None:
+        return (False)
+    if len(s) > 5:
+        return (False)
+    s = re.sub(r'[̀́҇ⸯ̑҆҅̾̏]+', '', s)
+    return (len(s) < 3)
+
+
+def ponomar_import_all_fragments():
+    """Считывает все абзацы по главам, делит их на фрагменты, 
+    * одинаковые по цвету
+    * одинаковые по языку
+    * вынимает сноски
+    * отделяет заголовки"""
+    # надо будет учесть: из culiturgical.dtd
+    # disp | red | wide | small | footnote | anchor | img
+    print ("Считываем все абзацы всех книг…")
+    path = source_base_path()
+    lang_cu = Language.find(name = 'cu', encoding = 'utf')
+    fragments = []
+    for ch in Chapter.objects.all():
+        print ("Считываем %s%s…" % (path, ch.path))
+        with open(path + ch.path, 'r') as f:
+            order_id = 1
+            bs = BeautifulSoup(f, "html.parser")
+            if  bs.document['lang'] != 'cu':
+                lang = Language.find_or_create(name = bs.document['lang'], encoding = 'utf')
+            # ??? 
+    print ("Добавляем %d фрагментов." % len(fragments))
+    Fragment.objects.bulk_create(fragments)
     print ("Готово.")
