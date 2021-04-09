@@ -26,4 +26,10 @@ def index(request, block_id=None):
 
 
 def paragraph(request, paragraph_id=None):
-    return None
+    paragraph = Paragraph.objects.get(id=paragraph_id)
+    block = paragraph.parent_block
+    path = []
+    while block is not None:
+        path = [[block.id, block.name_short]] + path
+        block = block.parent_block
+    return render(request, 'paragraph.html', {'path' : path, 'paragraph' : paragraph})

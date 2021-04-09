@@ -6,5 +6,5 @@ app_name = 'hymns'
 urlpatterns = [
     path('', views.index, name='index'),
     path('blocks/<int:block_id>/', views.index, name='blocks'),
-    path('par/<int:paragraph_id>/', views.index, name='par'),
+    path('par/<int:paragraph_id>/', views.paragraph, name='par'),
 ]
