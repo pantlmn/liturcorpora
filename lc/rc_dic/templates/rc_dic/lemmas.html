@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% include "rc_dic/link_css.html" %}
+    <title>Леммы ruscorpora</title>
+</head>
+<body class="amber lighten-5">
+<nav>
+    <div class="nav-wrapper row deep-orange darken-4">
+        <div class="col s12 l8 offset-l2">
+            <a href="/" class="breadcrumb"><i class="material-icons">home</i></a>
+            <a href="/ruscorpora" class="breadcrumb">ruscorpora</a>
+        </div>
+    </div>
+</nav>
+
+<!-- <div class="row">
+    <div class="input-field col s12 m12 l8 offset-l2 red-text">
+    <i class="red-text material-icons prefix">search</i>
+    <input type="text" placeholder="Найти…" class="red-text csl-rc flow-text" >
+    </div>
+</div> -->
+<div class=row>
+    <form class="col s12 m12 l8 offset-l2" action="{% url 'rc_dic:find_word' %}" method="get">
+        <div class=row>
+            <div class="input-field col s10 m10 l10">
+                <input id="icon_prefix" type="text" name="q">
+                <label for="icon_prefix">Найти слово…</label>
+            </div>
+            <div class="input-field col s2 m2 l2">
+                <button class="btn waves-effect waves-light deep-orange darken-3 right" type="submit">
+                    Искать
+                    <i class="material-icons left">search</i>
+                </button>
+            </div>
+        </div>
+    </form>
+<div class="col s12 m12 l8 offset-l2">
+    {% if lemmas.paginator.count > 0 %}
+        <p>Найдено лемм: {{ lemmas.paginator.count }}</p>
+    {% else %}
+        <p>Ничего не найдено, простите.</p>
+    {% endif %}
+<div class="collection flow-text">
+    {% for lemma in lemmas %}
+        <a href="{% url 'rc_dic:list_lemmas' %}{{ lemma.pk }}/" class="collection-item csl-rc brown-text text-darken-2">{{ lemma.txt }}</a>
+    {% endfor %}
+</div>
+</div>
+</div>
+<div class="row center">
+<div class="col s12 m12 l8 offset-l2">
+<ul class="pagination">
+    {% if lemmas.has_previous %}
+        <li class="waves-effect"><a href="?page=1{% if q %}&q={{ q }}{% endif%}"><i class="material-icons">first_page</i></a></li>
+        <li class="waves-effect"><a href="?page={{ lemmas.previous_page_number }}{% if q %}&q={{ q }}{% endif%}"><i class="material-icons">chevron_left</i></a></li>
+    {% else %}
+        <li class="disabled"><a href="#!"><i class="material-icons">first_page</i></a></li>
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+    {% endif %}
+    <li class="active deep-orange darken-3"><a>{{ lemmas.number }}</a></li>
+    {% if lemmas.has_next %}
+        <li class="waves-effect"><a href="?page={{ lemmas.next_page_number }}{% if q %}&q={{ q }}{% endif%}"><i class="material-icons">chevron_right</i></a></li>
+        <li class="waves-effect"><a href="?page={{  lemmas.paginator.num_pages }}{% if q %}&q={{ q }}{% endif%}"><i class="material-icons">last_page</i></a></li>
+    {% else %}
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        <li class="disabled"><a href="#!"><i class="material-icons">last_page</i></a></li>
+    {% endif %}
+</ul>
+</div>
+</div>
+{% include "rc_dic/bottom_js.html" %}
+</body>
+</html>

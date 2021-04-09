@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  {% include "rc_dic/link_css.html" %}
+  <title>Ткань богослужебных текстов</title>
+</head>
+<body class="amber lighten-5">
+  <nav class="deep-orange darken-4" role="navigation">
+    <!-- <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">pantlmn.ru</a> -->
+      <!-- <ul class="right hide-on-med-and-down">
+        <li><a href="#">Navbar Link</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="#">Navbar Link</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a> -->
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <h1 class="header center brown-text text-darken-2 csl-rc">ТКАНЬ<br />бого&shy;служебных<br>текстов</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Эксперименты по применению методов компьютерной лингвистики к корпусу богослужебных текстов Православной Церкви.</h5>
+      </div>
+      <div class="row">
+          <div class="col s12 m8 l8 offset-l2 offset-m2">
+              <!-- <div class="center">
+                <a href="#!" class="btn-large waves-effect waves-light orange darken-2">Проверь свой словарный запас!</a>
+              </div> -->
+                <h5 class="center brown-text text-darken-2"><i class="material-icons">list_alt</i><br />
+                Словари</h5>
+                <div class="collection">
+                <a class="collection-item brown-text text-darken-2" href="/ruscorpora/lemmas">Леммы (словарь А. Е. Полякова)</a>
+                </div>
+                <h5 class="center brown-text text-darken-2"><i class="material-icons">subject</i><br />
+                Тексты</h5>
+                <div class="collection">
+                <a class="collection-item brown-text text-darken-2" href="/hymns">Церковнославянские тексты в гражданской графике</a>
+                </div>
+                <!-- <h5 class="center csl-rc">Тексты</h5>
+                <div class="collection">
+                <a class="inactive collection-item brown-text text-darken-2" href="#!">Поиск похожего песнопения (в разработке)</a>
+                </div> -->
+            </div>
+      <div>
+    </div>
+  </div>
+
+
+  <!-- <div class="container">
+    <div class="section"> -->
+
+      <!--   Icon Section   -->
+<div class="row">
+
+    <div class="col s12 m4">
+      <div class="icon-block">
+        <h5 class="center brown-text text-darken-2"><i class="material-icons">group</i><br />
+        Команда</h5>
+
+          <p class="light">
+            игумен Пантелеимон (Королёв),
+            Александр Кравецкий,
+            Анастасия Бонч-Осмоловская,
+            студенты ВШЭ.
+          </p>
+      </div>
+    </div>
+
+    <div class="col s12 m4">
+      <div class="icon-block">
+        <h5 class="center brown-text text-darken-2"><i class="material-icons">send</i><br />
+        Новости</h5>
+
+          <p class="light">
+            Известия о развитии проекта и новости о смежных событиях публикуются
+            в телеграм-канале <a target="_blank" class="deep-orange-text" href='https://t.me/liturcorpora'>@liturcorpora</a>.
+          </p>
+      </div>
+    </div>
+
+
+    <div class="col s12 m4">
+      <div class="icon-block">
+        <h5 class="center brown-text text-darken-2"><i class="material-icons">code</i><br />
+        Код и данные</h5>
+
+        <p class="light">Программный код на Django и базу данных SQLite вы можете <a href="https://github.com/pantlmn/liturcorpora.git" target="_blank" class="deep-orange-text">скачать с GitHub</a>.</p>
+      </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col s12 m4">
+      <div class="icon-block">
+        <h5 class="center brown-text text-darken-2"><i class="material-icons">person_add</i><br />
+        Принять участие</h5>
+
+        <p class="light">Если вы желаете внести свою лепту в проект, пишите игумену Пантелеимону: <a href="mailto:pantlmn@gmail.com" class="deep-orange-text">pantlmn@gmail.com</a>.</p>
+      </div>
+    </div>
+</div>
+<!-- Видеоматериалы -->
+<div class="row">
+    <div class="col s12">
+        <h5 class="center brown-text text-darken-2"><i class="material-icons">library_books</i><br />
+        Справочные материалы</h5>
+    </div>
+    <div class="col s12 m6 l6">
+        <p>Рассказ иеромонаха Пантелеимона (Королёва) о цифровых подходах к изучению богослужебных текстов (Центр Digital Humanities НИУ ВШЭ, 14&nbsp;декабря 2018&nbsp;г., продолжительность 42&nbsp;мин.)</p>
+        <div class="video-container">
+        <iframe width="853" height="480" src="//www.youtube.com/embed/Y3y77J3qL1Y?rel=0" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div class="col s12 m6 l6">
+        <p>Итоговая презентация мастерской «Богослужебные тексты: скрытые и явные параллели» в школе по цифровым гуманитарным исследованиям MoTart DH IV (продолжительность 20&nbsp;мин, смотрите также <a target="_blank" class="deep-orange-text" href='http://bit.ly/2BxuRNF'>слайды этой презентации</a>)</p>
+        <div class="video-container">
+        <iframe width="853" height="480" src="//www.youtube.com/embed/EIWxkLGUS0E?rel=0" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m6 l6">
+        <p>Доклад игумена Пантелеимона (Королёва) «Богослужебные тексты и Digital Humanities» на семинаре Научного центра истории богословия и богословского образования ПСТГУ (29&nbsp;ноября 2019&nbsp;года, продолжительность 33&nbsp;мин).</p>
+        <p>Аудиозапись дискуссии после доклада также <a class="deep-orange-text" href='{% static "rc_dic/audio/2019_11_29_pantlmn_Discussion.mp3" %}'>доступна (mp3, 58Mb, 60&nbsp;мин)</a>.</p>
+        <div class="video-container">
+        <iframe width="853" height="480" src="//www.youtube.com/embed/K8n1VH7yMwo?rel=0" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+  {% include "rc_dic/bottom_js.html" %}
+  </body>
+</html>
