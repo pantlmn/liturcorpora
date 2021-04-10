@@ -1,0 +1,75 @@
+@font-face {
+	font-family: 'Ponomar Unicode';
+  src: url('/static/rc_dic/PonomarUnicode.eot');
+  src: url('/static/rc_dic/PonomarUnicode.eot?#iefix') format('embedded-opentype'),
+       url('/static/rc_dic/PonomarUnicode.woff') format('woff'),
+       url('/static/rc_dic/PonomarUnicode.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Fedorovsk Unicode';
+	src: url('/static/rc_dic/FedorovskUnicode.eot?#iefix') format('embedded-opentype'),
+	     local('Fedorovsk Unicode'), local('Fedorovsk Unicode TT'),
+	     url('/static/rc_dic/FedorovskUnicodeSIL.ttf')  format('truetype'),
+	     url('/static/rc_dic/FedorovskUnicode.woff') format('woff'),
+	    url('/static/rc_dic/FedorovskUnicode.svg#FedorovskUnicode') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Old Standard';
+	src: url('/static/rc_dic/OldStandardTT-Regular.eot');
+	src: local('Old Standard TT Regular'), local('OldStandardTT-Regular'),
+		url('/static/rc_dic/OldStandardTT-Regular.eot?#iefix') format('embedded-opentype'),
+		url('/static/rc_dic/OldStandardTT-Regular.woff') format('woff'),
+		url('/static/rc_dic/OldStandardTT-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+.csl-rc {
+	font-family: "Old Standard";
+}
+p, ul, li, h1, h2, h3, h4, h5 {
+    -webkit-hyphens: auto;
+    -webkit-hyphenate-limit-before: 3;
+    -webkit-hyphenate-limit-after: 3;
+    -webkit-hyphenate-limit-chars: 6 3 3;
+    -webkit-hyphenate-limit-lines: 2;
+    -webkit-hyphenate-limit-last: always;
+    -webkit-hyphenate-limit-zone: 8%;
+
+    -moz-hyphens: auto;
+    -moz-hyphenate-limit-chars: 6 3 3;
+    -moz-hyphenate-limit-lines: 2;
+    -moz-hyphenate-limit-last: always;
+    -moz-hyphenate-limit-zone: 8%;
+
+    -ms-hyphens: auto;
+    -ms-hyphenate-limit-chars: 6 3 3;
+    -ms-hyphenate-limit-lines: 2;
+    -ms-hyphenate-limit-last: always;
+    -ms-hyphenate-limit-zone: 8%;
+
+    hyphens: auto;
+    hyphenate-limit-chars: 6 3 3;
+    hyphenate-limit-lines: 2;
+    hyphenate-limit-last: always;
+    hyphenate-limit-zone: 8%;
+}
+.inline-icon {
+   vertical-align: top;
+}
+/* label focus color */
+.input-field input:focus + label {
+	color: #bf360c !important;
+}
+/* label underline focus color */
+.row .input-field input:focus {
+	border-bottom: 2px solid #bf360c !important;
+	box-shadow: 0 0px 0 0  !important
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+	color: #bf360c !important;
+}

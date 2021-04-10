@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% include "rc_dic/link_css.html" %}
+    <title>Лемма «{{ lemma.txt }}» ruscorpora</title>
+</head>
+<body class="amber lighten-5">
+<nav>
+    <div class="nav-wrapper row deep-orange darken-4">
+        <div class="col s12 l8 offset-l2">
+            <a href="/" class="breadcrumb"><i class="material-icons">home</i></a>
+            <a href="/ruscorpora" class="breadcrumb">ruscorpora</a>
+            <a href="/ruscorpora/lemmas" class="breadcrumb">леммы</a>
+        </div>
+    </div>
+</nav>
+
+<div class=row>
+<div class="col s12 m12 l8 offset-l2">
+    <h2 class="csl-rc">{{ lemma.txt }}</h2>
+    <h4 class="csl-rc">Грамматические характеристики:
+        {% if lemma.grammar_attributes %}
+            {{ lemma.grammar_attributes }}
+        {% else %}
+            —
+        {% endif %}
+    </h4>
+    <h4 class="csl-rc">Встречающиеся формы:</h4>
+    <div class="collection flow-text">
+        {% for token in tokens %}
+            <p class="collection-item csl-rc"><span class="brown-text text-darken-2">{{ token.txt }}</span>
+            {% if token.grammar_attributes %}
+                <span class="brown-text text-lighten-1">({{ token.grammar_attributes }})</span></p>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% if unused_tokens %}
+    <h4 class="csl-rc">Другие возможные формы <span class="brown-text text-lighten-1">({{ paradigms }})</span>:</h4>
+    <div class="collection flow-text">
+        {% for token, gram in unused_tokens.items %}
+            <p class="collection-item csl-rc"><span class="brown-text text-darken-2">{{ token }}*</span>
+            <span class="brown-text text-lighten-1">({{ gram }})</span></p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if prev_lemma %}
+    <div class="left">
+        <ul class="pagination">
+        <li class="waves-effect"><a href="../{{ prev_lemma.pk }}/"><span class="csl-rc inline-icon"><i class="material-icons">chevron_left</i>{{ prev_lemma.txt }}</span></a></li>
+        </ul>
+    </div>
+    {% endif %}
+    {% if next_lemma %}
+    <div class="right">
+        <ul class="pagination">
+        <li class="waves-effect"><a href="../{{ next_lemma.pk }}/"><span class="csl-rc inline-icon">{{ next_lemma.txt }}<i class="material-icons">chevron_right</i></span></a></li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% include "rc_dic/bottom_js.html" %}
+</body>
+</html>
